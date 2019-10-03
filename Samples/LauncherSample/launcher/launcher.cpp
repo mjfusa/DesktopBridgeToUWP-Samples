@@ -130,8 +130,10 @@ int wmain()
 	trim(executable);
 	trim(currentDirectory);
 
-	// Read third line for EXE to launch prior to main app.
+	// Read optional third line for EXE to launch prior to main app.
 	std::wstring preLaunchExe;
+	std::wstring onetimeStr;
+	bool onetimeFlag=false;
 	std::wstring preLaunchExePath;
 	int argc = 0;
 	LPWSTR* szArglist=NULL;
@@ -149,9 +151,27 @@ int wmain()
 		szArglist = CommandLineToArgvW(preLaunchExe.c_str(), &argc);
 		if (szArglist != NULL)
 			preLaunchExe = szArglist[0];
+	
+		// Read optional fourth line for option to launch pre-launcher only once.
+		if (!infile.getline(buffer, length))
+		{
+			std::wcout << L"info -- unable to read 'onetime' directive from line 4 of 'launcher.cfg'!" << std::endl;
+			std::wcout << L"(example: onetime')" << std::endl;
+		}
+		else {
+			onetimeStr = buffer;
+			CharLowerBuffW((LPWSTR)onetimeStr.c_str(), onetimeStr.length());
+			if (onetimeStr == (std::wstring) L"onetime")
+			{
+				onetimeFlag = true;
+			}
+		}
 	}
 
-    if (executable.empty())
+    
+	
+	
+	if (executable.empty())
     {
         std::wcout << L"error -- invalid executable specified on line 1 of 'launcher.cfg'!" << std::endl;
         return 1;
@@ -182,7 +202,9 @@ int wmain()
 
 	if (!preLaunchExe.empty())
 	{
-		DWORD previousRunExitCode = GetPreviousRun();
+		DWORD previousRunExitCode = -1;
+		if (onetimeFlag)
+			previousRunExitCode = GetPreviousRun();
 		if (previousRunExitCode == -1)
 		{
 
