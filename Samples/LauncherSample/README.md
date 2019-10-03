@@ -1,10 +1,12 @@
 ﻿# Launcher sample
 
 This c++ sample creates a launcher that sets the current working directory for your application entrypoint at runtime. This should be considered as a workaround, ideally you should update your main process code to set the CWD. 
-See this blog post for more details on how to properly set your current working directory or alternately use the launcher: [Accessing to the files in the installation folder in a Desktop Bridge application](http://blogs.msdn.microsoft.com/appconsult/2017/06/23/accessing-to-the-files-in-the-installation-folder-in-a-desktop-bridge-application/)
+See this blog post for more details on how to properly set your current working directory or alternately use the launcher: [Accessing to the files in the installation folder in a Desktop Bridge application](http://blogs.msdn.microsoft.com/appconsult/2017/06/23/accessing-to-the-files-in-the-installation-folder-in-a-desktop-bridge-application/).
+
+The sample also includes the capability to launch an application prior to the launching of the main app. When this pre-launch app runs successfully a flag is set, preventing it from running a second time. The scenario where you may want to   
 
 Build and Run the sample
--------------------------------
+-------------------------
 
  - Build the solution.
  - Copy Launcher.exe and Launcher.cfg from the build path to the root of your Windows package.
